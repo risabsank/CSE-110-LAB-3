@@ -34,6 +34,20 @@ function App() {
     setNewNote(initialNote);
   };
 
+  const [selectedNote, setSelectedNote] = useState(initialNote);
+  const editNoteHandler = (note: Note) => {
+    setSelectedNote(note);
+  };
+
+  const updateNote = (field: keyof Note, value: string) => {
+    if (selectedNote) {
+      const updatedNotes = newNotes.map(note =>
+        note.id === selectedNote.id ? { ...note, [field]: value } : note
+      );
+      setNewNotes(updatedNotes);
+    }
+  };
+
   return (
     <NotesContext.Provider value={value}>
       <div className='app-container'>
@@ -82,17 +96,28 @@ function App() {
           </div>
         </form>
         <div className="notes-grid">
-          {newNotes.map((note: Note) => (
+          {newNotes.map((note) => (
             <div
               key={note.id}
               className="note-item">
               <div className="notes-header">
                 <FavoriteButton note={note} />
-                <button>x</button>
+                <button className="edit-button" onClick={() => editNoteHandler(note)}>Edit</button>
               </div>
-              <h2> {note.title} </h2>
-              <p> {note.content} </p>
-              <p> {note.label} </p>
+              <h2
+                contentEditable={selectedNote.id === note.id}
+                onBlur={(event) => updateNote('title', event.target.innerText)}
+              >
+                {note.title}
+              </h2>
+              <p
+                contentEditable={selectedNote.id === note.id}
+                onBlur={(event) => updateNote('content', event.target.innerText)}
+              >
+                {note.content}
+              </p>
+              <p contentEditable={selectedNote.id === note.id}
+                onBlur={(event) => updateNote('label', event.target.innerText)}>{note.label}</p>
             </div>
           ))}
         </div>
