@@ -3,7 +3,7 @@ import { Note } from './types';
 import { useContext } from 'react';
 import { NotesContext } from './NotesContext';
 
-function FavoriteButton({note}: {note: Note}) {
+function FavoriteButton({ note }: { note: Note }) {
     const [isFavorite, setIsFavorite] = useState(note.favorite);
     const { notes, setNotes } = useContext(NotesContext);
 
