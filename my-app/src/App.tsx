@@ -3,8 +3,9 @@ import { dummyNotesList } from "./constants"; // Import the dummyNotesList from 
 import { Note, Label } from "./types";
 import ToggleTheme from "./hooksExercise";
 import FavoriteButton from "./favoriteButton";
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { NotesContext } from "./NotesContext";
+import { ThemeContext, themes } from "./ThemeContext";
 
 function App() {
   const [notes, setNotes] = useState([] as string[]);
@@ -17,9 +18,12 @@ function App() {
     label: Label.other,
     favorite: false,
   };
-  const [newNotes, setNewNotes] = useState<Note[]>(dummyNotesList);
 
+  const [newNotes, setNewNotes] = useState<Note[]>(dummyNotesList);
   const [newNote, setNewNote] = useState<Note>(initialNote);
+
+  // Theme state for all notes
+  const [currentTheme, setCurrentTheme] = useState(themes.light);
 
   const createNoteHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,7 +34,6 @@ function App() {
     };
 
     setNewNotes([...newNotes, noteToAdd]);
-
     setNewNote(initialNote);
   };
 
@@ -46,6 +49,16 @@ function App() {
       );
       setNewNotes(updatedNotes);
     }
+  };
+
+  const deleteNote = (id: number) => {
+    const newNotesList = newNotes.filter(note => note.id !== id);
+    setNewNotes(newNotesList);
+  };
+
+  // General toggle theme button that affects all notes
+  const toggleTheme = () => {
+    setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
   };
 
   return (
@@ -90,35 +103,21 @@ function App() {
           <div>
             <button type="submit">Create Note</button>
           </div>
-          <div className="notes-list">
-            <h2>List of Favorites:</h2>
-            {notes.map(note => <div key={note}>{note}</div>)}
-          </div>
         </form>
+
+        <button onClick={toggleTheme}>Toggle Theme</button>
+
         <div className="notes-grid">
           {newNotes.map((note) => (
-            <div
+            <NoteItem
               key={note.id}
-              className="note-item">
-              <div className="notes-header">
-                <FavoriteButton note={note} />
-                <button className="edit-button" onClick={() => editNoteHandler(note)}>Edit</button>
-              </div>
-              <h2
-                contentEditable={selectedNote.id === note.id}
-                onBlur={(event) => updateNote('title', event.target.innerText)}
-              >
-                {note.title}
-              </h2>
-              <p
-                contentEditable={selectedNote.id === note.id}
-                onBlur={(event) => updateNote('content', event.target.innerText)}
-              >
-                {note.content}
-              </p>
-              <p contentEditable={selectedNote.id === note.id}
-                onBlur={(event) => updateNote('label', event.target.innerText)}>{note.label}</p>
-            </div>
+              note={note}
+              selectedNote={selectedNote}
+              editNoteHandler={editNoteHandler}
+              deleteNote={deleteNote}
+              updateNote={updateNote}
+              theme={currentTheme}
+            />
           ))}
         </div>
       </div>
@@ -126,5 +125,55 @@ function App() {
   );
 }
 
-export default App;
+function NoteItem({
+  note,
+  selectedNote,
+  editNoteHandler,
+  deleteNote,
+  updateNote,
+  theme
+}: {
+  note: Note;
+  selectedNote: Note;
+  editNoteHandler: (note: Note) => void;
+  deleteNote: (id: number) => void;
+  updateNote: (field: keyof Note, value: string) => void;
+  theme: typeof themes.light;
+}) {
+  return (
+    <div
+      className="note-item"
+      style={{
+        background: theme.background,
+        color: theme.foreground,
+        padding: "20px",
+      }}
+    >
+      <div className="notes-header">
+        <FavoriteButton note={note} />
+        <button className="edit-button" onClick={() => editNoteHandler(note)}>Edit</button>
+        <button onClick={() => deleteNote(note.id)}>x</button>
+      </div>
+      <h2
+        contentEditable={selectedNote.id === note.id}
+        onBlur={(event) => updateNote('title', event.target.innerText)}
+      >
+        {note.title}
+      </h2>
+      <p
+        contentEditable={selectedNote.id === note.id}
+        onBlur={(event) => updateNote('content', event.target.innerText)}
+      >
+        {note.content}
+      </p>
+      <p
+        contentEditable={selectedNote.id === note.id}
+        onBlur={(event) => updateNote('label', event.target.innerText)}
+      >
+        {note.label}
+      </p>
+    </div>
+  );
+}
 
+export default App;

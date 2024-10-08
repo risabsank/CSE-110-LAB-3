@@ -3,49 +3,48 @@ import { ThemeContext, themes } from "./ThemeContext";
 import { useContext } from 'react';
 
 function ToggleTheme() {
-    const [currentTheme, setCurrentTheme] = useState(themes.light);
-   
-    const toggleTheme = () => {
-      setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
-    };
-   
-    return (
-      <ThemeContext.Provider value={currentTheme}>
-        <button onClick={toggleTheme}> Toggle Theme </button>
-        <ClickCounter />
-      </ThemeContext.Provider>
-    );
+  const [currentTheme, setCurrentTheme] = useState(themes.light);
+
+  const toggleTheme = () => {
+    setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
+  };
+
+  return (
+    <ThemeContext.Provider value={currentTheme}>
+      <button onClick={toggleTheme}> Toggle Theme </button>
+    </ThemeContext.Provider>
+  );
 }
- 
+
 export default ToggleTheme;
 
 export function ClickCounter() {
- const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
- const handleClick = () => {
-   setCount(count + 1);
- };
+  const handleClick = () => {
+    setCount(count + 1);
+  };
 
- useEffect(() => {
-   document.title = `You clicked ${count} times`;
- }, [count]);
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  }, [count]);
 
- const theme = useContext(ThemeContext);
- return (
+  const theme = useContext(ThemeContext);
+  return (
     <div
-        style={{
+      style={{
         background: theme.background,
         color: theme.foreground,
         padding: "20px",
-        }}
+      }}
     >
-        <p>You clicked {count} times </p>
-        <button
+      <p>You clicked {count} times </p>
+      <button
         onClick={() => setCount(count + 1)}
         style={{ background: theme.foreground, color: theme.background }}
-        >
+      >
         Click me
-        </button>
+      </button>
     </div>
-    );
+  );
 }
