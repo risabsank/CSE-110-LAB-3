@@ -37,4 +37,9 @@ export const dummyNotesList = [
         content: "test note 6 content",
         label: Label.personal,
     },
- ]
+]
+
+export const dummyGroceryList = [
+    { name: "Apples", isPurchased: false },
+    { name: "Bananas", isPurchased: false },
+]
