@@ -1,20 +1,19 @@
 import './App.css';
-import { dummyNotesList } from "./constants"; // Import the dummyNotesList from the appropriate module
-import { Note, Label } from "./types";
-import ToggleTheme from "./hooksExercise";
-import FavoriteButton from "./favoriteButton";
-import { useContext, useState } from 'react';
-import { NotesContext } from "./NotesContext";
-import { ThemeContext, themes } from "./ThemeContext";
-import StickyNote from './stickyNotes';
+import StickyNotes from './stickyNotes';
+import { ToDoList } from './toDoList';
+import { Route, Routes } from "react-router-dom";
+import { Navbar } from "./navbar";
 
-function App() {
-
+const App = () => {
   return (
     <div>
-      <StickyNote />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<StickyNotes />} />
+        <Route path="/todolist" element={<ToDoList />} />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
