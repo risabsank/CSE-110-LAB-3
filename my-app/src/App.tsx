@@ -64,7 +64,6 @@ function App() {
   return (
     <NotesContext.Provider value={value}>
       <div className='app-container'>
-        <ToggleTheme />
         <form className="note-form" onSubmit={createNoteHandler}>
           <div>
             <input
@@ -104,6 +103,11 @@ function App() {
             <button type="submit">Create Note</button>
           </div>
         </form>
+        <div className="notes-list">
+          <h2>List of Favorites:</h2>
+          {notes.map(note => <div key={note}>{note}</div>)}
+        </div>
+
 
         <button onClick={toggleTheme}>Toggle Theme</button>
 
