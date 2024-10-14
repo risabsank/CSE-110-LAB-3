@@ -1,5 +1,5 @@
 import './App.css';
-import StickyNotes from './stickyNotes';
+import { StickyNotes } from './stickyNotes';
 import { ToDoList } from './toDoList';
 import { Route, Routes } from "react-router-dom";
 import { Navbar } from "./navbar";

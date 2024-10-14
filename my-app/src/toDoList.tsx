@@ -37,14 +37,16 @@ export function ToDoList() {
             <div className="App-body">
                 Items bought: {numRemainingItems}
                 <form action=".">
-                    {items.map((item) => ListItem(item, handleCheckboxClick))}
+                    {items.map((item) => (
+                        <ListItem key={item.name} item={item} changeHandler={handleCheckboxClick} />
+                    ))}
                 </form>
             </div>
         </div>
     );
 }
 
-function ListItem(item: GroceryItem, changeHandler: ChangeEventHandler) {
+function ListItem({ item, changeHandler }: { item: GroceryItem; changeHandler: ChangeEventHandler }) {
     return (
         <div>
             <input
@@ -52,8 +54,9 @@ function ListItem(item: GroceryItem, changeHandler: ChangeEventHandler) {
                 onChange={changeHandler}
                 checked={item.isPurchased}
                 name={item.name}
+                id={item.name}
             />
-            {item.name}
+            <label htmlFor={item.name}>{item.name}</label>
         </div>
     );
 }

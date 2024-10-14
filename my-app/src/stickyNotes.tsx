@@ -7,7 +7,7 @@ import { useContext, useState } from 'react';
 import { NotesContext } from "./NotesContext";
 import { ThemeContext, themes } from "./ThemeContext";
 
-function StickyNotes() {
+export const StickyNotes = () => {
     const [notes, setNotes] = useState([] as string[]);
     const value = { notes, setNotes };
 
@@ -179,5 +179,3 @@ function NoteItem({
         </div>
     );
 }
-
-export default StickyNotes;
