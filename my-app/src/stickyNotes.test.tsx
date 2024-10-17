@@ -127,9 +127,12 @@ describe("Delete StickyNote", () => {
         expect(screen.getByText("Note to be Deleted")).toBeInTheDocument();
         expect(screen.getByText("This note will be deleted.")).toBeInTheDocument();
 
-        const deleteButtons = screen.getAllByRole('button', { name: /x/i });
+        const noteToDelete = screen.getByText("Note to be Deleted");
+        // eslint-disable-next-line testing-library/no-node-access
+        const deleteButton = within(noteToDelete.parentElement!).getByRole('button', { name: /x/i });
 
-        fireEvent.click(deleteButtons[0]);
+
+        fireEvent.click(deleteButton);
 
         expect(screen.queryByText("Note to be Deleted")).not.toBeInTheDocument();
         expect(screen.queryByText("This note will be deleted.")).not.toBeInTheDocument();
